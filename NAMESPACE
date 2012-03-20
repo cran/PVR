@@ -1,0 +1,7 @@
+export(PVRdecomp,PVR, PSR, VarPartplot, PSRplot)
+import(ape, methods)
+importFrom("splancs", areapl)
+importFrom("graphics", plot)
+importFrom("methods", show)
+exportClasses("PVR", "PSR")
+
