@@ -8,7 +8,7 @@ Creates a phylogenetic signal-representation (PSR) curve for a given phylogeny a
 Phylogenetic signal-representation (PSR) curve, built upon phylogenetic eigenvector regression (PVR). Sequential PVR models are fitted after successively increasing the number of eigenvectors and plotting their R2 against the accumulated eigenvalues. The PSR area, expressing deviations from Brownian motion, is strongly correlated with Blomberg's K-statistics, so nonlinear PSR curves reveal if traits are evolving at a slower or higher rate than expected. The PSR area is also correlated with phylogenetic half-life under an OU process, so both methods describe the relationship between interspecific variation and time since divergence among species shape.
 }
 \usage{
-PSR(x, trait = NULL, null.model = FALSE, hypothesis = "two", neutral.model = FALSE, times = 1000)
+PSR(x, trait = NULL, null.model = FALSE, Brownian.model = FALSE, times = 1000)
 }
 
 \arguments{
@@ -16,24 +16,22 @@ PSR(x, trait = NULL, null.model = FALSE, hypothesis = "two", neutral.model = FAL
 A object of class PVR (created using PVRdecomp function).
 }
   \item{trait}{
-A vector, data frame or matrix that contains traits sets (for data frames and matrices, each column must represent a trait set). For now, only the first colunm will be used.
+A vector, data frame or matrix that contains contiuous or binary traits sets (for data frames and matrices, each column must represent a trait set). For now, only the first colunm will be used.
 }
+
   \item{null.model}{
 Logical. Should the function estimates the null expectancy for the PSR area. Default is FALSE.
 }
-  \item{hypothesis}{
-"greater", "smaller" or "two" tailed alternative hypothesis. Use to estimate p. Not implemented. 
-}
-  \item{neutral.model}{
-Logical. Should the function estimates the neutral (brownian) expectancy for the PSR area. Default is FALSE.
+  \item{Brownian.model}{
+Logical. Should the function estimates the Brownian (neutral) expectancy for the PSR area. Default is FALSE.
 }
   \item{times}{
-Number of iterations used in null.model and neutral.model.
+Number of iterations used in null.model and Brownian.model.
 }
 }
 
 \value{
-PSR function returns a object of (S4) class PSR that extends the (S4) class PVR, by adding: a PSR slot that contains the area (and p if null.model = TRUE) for each trait set and the cululatives eigenvalues and R2 that determine the curve; a slot with the null and neutral expectancies (if any).
+PSR function returns a object of (S4) class PSR that extends the (S4) class PVR, by adding: a PSR slot that contains the area (and p if null.model = TRUE) for each trait set, the cumulative eigenvalues and R2 that determine the curve; a slot with the null and neutral expectancies (if any).
 
 }
 \references{

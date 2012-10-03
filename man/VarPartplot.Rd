@@ -5,7 +5,7 @@
 Plot function for objects of class PVR to show variation partition components.
 }
 \description{
-Plot a, b, c and d components of traits variation partition between phylogeny and environment (as defined by Legendre and Legendre, 1998).
+Plot a, b, c and d components of traits variation partition between phylogeny and environment (as defined by Desdevises et al., 2003).
 }
 \usage{
 VarPartplot(x, ...)
@@ -24,6 +24,8 @@ Parameters passed to the plot function.
 Diniz-Filho, J.A.F., Sant'Ana, C.E.R. and Bini, L.M. (1998). An eigenvector method for estimating phylogenetic inertia. Evolution 52:1247-1262.
 
 Legendre, P. and Legendre, L. (1998). Numerical ecology, 2nd Englished. Elsevier.
+
+Desdevises, Y., Legendre, P., Azouzi, L. and Morand, S. (2003). Quantifying phylogenetic structured environmental variation, Evolution, 57(11):2647-2652.
 
 Diniz-filho, J.A.F., Rangel, T.F., Santos, T. and Bini, L.M. (2012). Exploring patterns of interespecific variation in quantitative traits using sequential phylogenetic eigenvector regressions. Evolution, 66(4):1079-1090.
 

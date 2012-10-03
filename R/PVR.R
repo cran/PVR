@@ -1,6 +1,6 @@
 PVR <- function(x, phy = NULL, trait = NULL, envVar = NULL, method = "moran", 
 		weights = NULL, scaled = FALSE, significance = TRUE, alternative = "two.sided",
-		sig.treshold = 0.05, MI.treshold = 0.05, psr.treshold = 0.01, n = 1, ...){
+		sig.treshold = 0.05, MI.treshold = 0.05, psr.treshold = 0.01, accvalue.treshold = 0.9, ...){
 	
 	if(method == "moran" | method == "Moran" | method == "MoransI" | method == "Moransi"){
 			
@@ -9,9 +9,9 @@ PVR <- function(x, phy = NULL, trait = NULL, envVar = NULL, method = "moran",
 		if(is.null(weights)){
 			
 			W <- max(x@phyDist) - x@phyDist	
-		} else
+		} else {
 			W <- weights 
-		
+		}
 		diag(W) <- 0
 		
 		N <- .poss(pvr)
@@ -27,13 +27,13 @@ PVR <- function(x, phy = NULL, trait = NULL, envVar = NULL, method = "moran",
 			
 			pvr <- as.matrix(pvr)
 			tmpLM <- lm(tmpTrait ~ pvr[ ,c1])
-			MI <- Moran.I(tmpLM$residuals, W, scaled = scaled, alternative = alternative)
-			tmpRes[c1, 1] <- MI$p.value
+			MI <- Moran.I(tmpLM$residuals, weight = W, scaled = scaled, alternative = alternative)
+			tmpRes[c1, 1] <- round(MI$p.value, 5)
 			tmpRes[c1, 2] <- MI$observed
 			
 			if(c1 == ncol(pvr)){
 				
-				selAxis <- which(tmpRes[ ,2] == min(tmpRes[ ,2]))
+				selAxis <- which(tmpRes[ ,2] == max(tmpRes[ ,2]))
 				tmpLM <- lm(tmpTrait ~ pvr[ ,selAxis[1]])
 				tmpTrait <- tmpLM$residuals
 				selected[ ,c2] <- pvr[ ,selAxis[1]]
@@ -47,13 +47,13 @@ PVR <- function(x, phy = NULL, trait = NULL, envVar = NULL, method = "moran",
 				colnames(pvr) <- tmpColNames 
 				if(significance){
 					
-					if(tmpRes[selAxis[1], 1] >= sig.treshold | c2 == Naxis){
+					if(tmpRes[selAxis[1], 1] > sig.treshold | c2 == Naxis){
 						
 						break
 					}	
 				} else {
 					
-					if(tmpRes[selAxis[1], 2] >= MI.treshold | c2 == Naxis){
+					if(tmpRes[selAxis[1], 2] > MI.treshold | c2 == Naxis){
 						
 						break
 					}
@@ -139,21 +139,32 @@ PVR <- function(x, phy = NULL, trait = NULL, envVar = NULL, method = "moran",
 	
 	if(method == "sequential"){
 		
-		pvr <- x@Eigen$vectors
-		selected <- pvr[,1:n]
-		reg <- colnames(pvr)[1:n]
+		relAccVal <- numeric(Naxis)
+		pvr <- x@Eigen
+		relVal <- pvr$values/sum(pvr$values)
+		for(i in 1:Naxis){
+			relAccVal[i] <- sum(relVal[1:i])
+		}
+		pvr <- x@Eigen@vectors
+		selected <- pvr[,which(relAccVal <= accvalue.treshold)]
+		reg <- colnames(selected)
 		selection <- list(Method = "Sequential", Vectors = selected, Id = reg)
 		x@Selection <- selection
 	}
 	
-	pvrOLS <- lm(trait ~ selection$Vectors)
-	x@PVR <- list(R2 = summary(pvrOLS)$r.squared, Residuals = pvrOLS$residuals)
-	
+	if(is.null(envVar)){
+		pvrOLS <- lm(trait ~ selection$Vectors)
+		x@PVR <- list(R2 = summary(pvrOLS)$r.squared, Residuals = pvrOLS$residuals)
+	} else{
+		
+		pvrOLS <- lm(trait ~ selection$Vectors + envVar)
+		x@PVR <- list(R2 = summary(pvrOLS)$r.squared, Residuals = pvrOLS$residuals, p = (summary(pvrOLS))$coefficient[2, 4])
+	}
 	if(!is.null(envVar)){
 			
 		ABC <- lm(trait ~ selection$Vectors + envVar)
-		AB <- lm(trait ~ selection$Vectors)
-		BC <- lm(trait ~ envVar)
+		AB <- lm(trait ~ envVar)
+		BC <- lm(trait ~ selection$Vectors)
 		D <- 1 - summary(ABC)$r.squared
 		B <- summary(AB)$r.squared + summary(BC)$r.squared - summary(ABC)$r.squared
 		A <- summary(AB)$r.squared - B

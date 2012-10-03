@@ -13,7 +13,7 @@ setClass("PVR", representation(
 )
 
 setClass("PSR", representation(
-				PSRarea = "data.frame", PSR = "data.frame", Expect.area.values = "list", nullPSR = "matrix", neutralPSR = "matrix"),
+				PSRarea = "data.frame", PSR = "data.frame", Expect.area.values = "list", nullPSR = "matrix", BrownianPSR = "matrix"),
 			contains = "PVR" 
 )
 
@@ -53,6 +53,12 @@ setMethod("show",
 		signature(object = "PSR"),
 		function (object) 
 		{
-			print(object@PSRarea)
+			cat("\n", "Phylogenetic Signal Representation (PSR) curve", "\n", sep = "")
+			cat("\t", "PSR area: ", object@PSRarea$PSR.area, "\n", sep = "")
+			cat("\t", "Probability of PSR area been equal to the null (random) expectancy: ", object@PSRarea$null.p, "\n", sep = "")
+			cat("\t", "Probability of PSR area been equal to the Brownian expectancy**: ", object@PSRarea$Brownian.p, "\n", sep = "")
+			cat("\t", "Iterations: ", object@PSRarea$iterations, "\n", sep = "")
+			cat("\t", "Trait type: ", attr(object, "trait.type"), "\n", sep = "")
+			cat("\n","\t", "**: ", "If trait is binary than the null expectancy is equal to the Brownian expectancy", "\n", sep = "")
 		}
 )

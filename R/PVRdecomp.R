@@ -1,5 +1,4 @@
-PVRdecomp <-
-function(phy = NULL, type = "newick", dist = NULL, scale = FALSE, ...){
+PVRdecomp <- function(phy = NULL, type = "newick", dist = NULL, scale = FALSE, ...){
 	##############---------The function and its arguments
 	
 	##############---------Loading and preparing data
@@ -27,11 +26,6 @@ function(phy = NULL, type = "newick", dist = NULL, scale = FALSE, ...){
 		} else {
 			
 			if(class(phy) == "phylo"){
-				
-				if(!is.ultrametric(phy)){
-					
-					stop("the phylogeny must be ultrametric")
-				}
 				
 				if (is.null(phy$edge.length)){ 
 					stop("the phylogeny has no branch lengths")

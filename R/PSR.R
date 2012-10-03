@@ -1,5 +1,4 @@
-PSR <-
-function(x, trait = NULL, null.model = FALSE, hypothesis = "two", neutral.model = FALSE, times = 1000){
+PSR <- function(x, trait = NULL, null.model = FALSE, Brownian.model = FALSE, times = 1000){
 ####---------Computing psr curve
 		
 		pvr <- x@Eigen
@@ -13,18 +12,30 @@ function(x, trait = NULL, null.model = FALSE, hypothesis = "two", neutral.model 
 		}
 		
 		trait <- as.matrix(trait)
+		nsp <- nrow(trait)
 		Ntraits <- ncol(trait)
-		areas <- data.frame(Id = 0, PSR.area = 0, p = NA)
-		nullareas <- data.frame(Id = 0, mean.area = 0, variance.area = NA)
+		areas <- data.frame(PSR.area = 0, null.p = NA, Brownian.p = NA, iterations = "none")
 		Naxis <- ncol(pvr$vectors)
+		binary <- FALSE
+			
+		if(max(trait[,1]) == 1 & min(trait[,1]) == 0 & length(unique(trait[ ,1])) == 2){
+			
+				warning("Binary traits: using Brownian expectancy as null model", "\n")
+				null.model = FALSE
+				binary <- TRUE
+		}
+
+		
 		for(k in 1:Ntraits){
 			
 			pvr$vectors[ ,1:Naxis] <- t(t(pvr$vectors[ ,1:Naxis])/sqrt(pvr$values[1:Naxis]))
 			relVal <- pvr$values/sum(pvr$values)
+			
 			for(i in 1:Naxis){
 				
 				psr[i, 1] <- summary(lm(trait[,k] ~ matrix(as.real(pvr$vectors[,1:i]), ncol = i)))$r.squared
-				psr[i, 2] <- sum(relVal[1:i])			
+				psr[i, 2] <- sum(relVal[1:i])	
+		
 			}
 			
 			#---------Computing psrarea
@@ -35,7 +46,8 @@ function(x, trait = NULL, null.model = FALSE, hypothesis = "two", neutral.model 
 			}
 			
 			coords[(nrow(coords) + 1), ] <- 1
-			psrarea <- .Area(as.matrix(coords))
+			psrarea <- .Area(coords)
+			areas[1, 1] <- psrarea
 			
 			#---------Creating PSRarea null distribution
 			if(null.model){
@@ -52,7 +64,8 @@ function(x, trait = NULL, null.model = FALSE, hypothesis = "two", neutral.model 
 					for(i in 1:Naxis){
 						
 						psrNull[i, 1] <- summary(lm(traitRand ~ matrix(as.real(pvr$vectors[,1:i]), ncol = i)))$r.squared
-						psrNull[i, 2] <- sum(relVal[1:i])		
+						psrNull[i, 2] <- sum(relVal[1:i])
+					
 					}
 					
 					nullDistribution[ ,t] <- psrNull[ ,1]
@@ -69,75 +82,104 @@ function(x, trait = NULL, null.model = FALSE, hypothesis = "two", neutral.model 
 				
 				#---------Computing p
 				distribCum <- ecdf(nullPsrarea[,1])
-				p2 <- 1 - distribCum(psrarea) 
-			}
-			areas[k, 1] <- paste("traits set ", k, sep = "")
-			areas[k, 2] <- psrarea
-			if(null.model){
+				nullp2 <- 1 - distribCum(psrarea)
+				areas[1, 2] <- nullp2
 				
-				areas[k, 3] <- p2
-				nullareas[k, 1] <- paste("traits.set.", k, sep = "")
-				nullareas[k, 2] <- mean(nullPsrarea[ ,1])
-				nullareas[k, 3] <- var(nullPsrarea[ ,1])
+				areas$iterations <- as.numeric(times)
 			}
+#			if(null.model){ used in version 0.1
+#				
+#				areas[k, 3] <- p2
+#				nullareas[k, 1] <- paste("traits.set.", k, sep = "")
+#				nullareas[k, 2] <- mean(nullPsrarea[ ,1])
+#				nullareas[k, 3] <- var(nullPsrarea[ ,1])
+#			}
 			 
 		}
 			#---------Creating PSRarea neutral distribution
-			if(neutral.model){
+			if(Brownian.model){
 				
-				neutralDistribution <- matrix(0, nrow = Naxis, ncol = times)
-				psrNeutral <- data.frame(r.squared = 0, eigenvalues = 0)
-				neutralPsrarea <- data.frame(a = 0)
+				BrownianDistribution <- matrix(0, nrow = Naxis, ncol = times)
+				psrBrownian <- data.frame(r.squared = 0, eigenvalues = 0)
+				BrownianPsrarea <- data.frame(a = 0)
 				phy <- x@phylo
 				for(t in 1:times){
 					
-					#---------shuffling trait vector
-					traitRand <- rTraitCont(phy, mpdel = "BM")
-					
+					#---------simulating trait vector
+
+						traitRand <- rTraitCont(phy, mpdel = "BM")
+						
+					if(binary){
+						
+						traitRand <- rTraitCont(phy, mpdel = "BM")
+						ones <- sum(trait[ ,k])
+						zeros <- nsp - ones
+						ind <- 1:nsp
+						ind <- ind[order(traitRand)]
+						traitRand <- c(rep(1, ones), rep(0, zeros))
+						traitRand <- traitRand[order(ind)]
+					}
+						
 					#---------Computing psr random curve
 					for(i in 1:Naxis){
-						
-						psrNeutral[i, 1] <- summary(lm(traitRand ~ matrix(as.real(pvr$vectors[,1:i]), ncol = i)))$r.squared
-						psrNeutral[i, 2] <- sum(relVal[1:i])		
+									
+						psrBrownian[i, 1] <- summary(lm(traitRand ~ matrix(as.real(pvr$vectors[,1:i]), ncol = i)))$r.squared
+						psrBrownian[i, 2] <- sum(relVal[1:i])
 					}
 					
-					neutralDistribution[ ,t] <- psrNeutral[ ,1]
+					BrownianDistribution[ ,t] <- psrBrownian[ ,1]
 					
 					#---------Computing psrarea
-					coordsNeutral = data.frame(x = c(0, psrNeutral[ ,2]), y = c(0, psrNeutral[ ,1]))
-					while(round(coordsNeutral[nrow(coordsNeutral), 1],7) == round(1,7) & round(coordsNeutral[nrow(coordsNeutral), 2],7) == round(1,7)){
+					coordsBrownian = data.frame(x = c(0, psrBrownian[ ,2]), y = c(0, psrBrownian[ ,1]))
+					while(round(coordsBrownian[nrow(coordsBrownian), 1],7) == round(1,7) & round(coordsBrownian[nrow(coordsBrownian), 2],7) == round(1,7)){
 						
-						coordsNeutral <- coordsNeutral[-nrow(coordsNeutral),]
+						coordsBrownian <- coordsBrownian[-nrow(coordsBrownian),]
 					}
 					
-					coordsNeutral[(nrow(coordsNeutral) + 1), ] <- 1
-					neutralPsrarea[t,1] <- .Area(as.matrix(coordsNeutral))
+					coordsBrownian[(nrow(coordsBrownian) + 1), ] <- 1
+					BrownianPsrarea[t,1] <- .Area(as.matrix(coordsBrownian))
 				}
+				
+				#---------Computing p
+				distribCum <- ecdf(BrownianPsrarea[,1])
+				Brownianp2 <- 1 - distribCum(psrarea)
+				areas[1, 3] <- Brownianp2
+				
+				areas$iterations <- as.numeric(times)
 			}
 		results <- new("PSR", x)
 		results@PSRarea <- areas
 		results@PSR <- data.frame(Cumul.eigen.values = psr[,2], r.squared = psr[,1])
 
 		Expect.area.values <- list(
-				Null.model = data.frame(),
-				meanNeutral = as.numeric(NA),
-				varianceNeutral = as.numeric(NA)
+				
+				meanNull = as.numeric(NA),
+				varianceNull = as.numeric(NA),
+				meanBrownian = as.numeric(NA),
+				varianceBrownian = as.numeric(NA)
 				)
 		
 		if(null.model){
 			
-			Expect.area.values$Null.model <- nullareas 
+			Expect.area.values$meanNull <- mean(nullPsrarea[ ,1]) 
+			Expect.area.values$varianceNull <- var(nullPsrarea[ ,1])
 			results@nullPSR <- nullDistribution
 			
 		}
 		
-		if(neutral.model){
+		if(Brownian.model){
 			
-			Expect.area.values$meanNeutral <- mean(neutralPsrarea[ ,1]) 
-			Expect.area.values$varianceNeutral <- var(neutralPsrarea[ ,1])
-			results@neutralPSR <- neutralDistribution
+			Expect.area.values$meanBrownian <- mean(BrownianPsrarea[ ,1]) 
+			Expect.area.values$varianceBrownian <- var(BrownianPsrarea[ ,1])
+			results@BrownianPSR <- BrownianDistribution
 		}
 		
 		results@Expect.area.values <- Expect.area.values
+		if(binary){
+			
+			attr(results, "trait.type") <- "binary"
+		} else
+			attr(results, "trait.type") <- "continuous"
+
 		return(results)
 }

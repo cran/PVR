@@ -1,5 +1,4 @@
-VarPartplot <-
-function(x, ...){
+VarPartplot <- function(x, ...){
 	
 	A <- round(x@VarPart[[1]], 5)
 	B <- round(x@VarPart[[2]], 5)
@@ -23,7 +22,9 @@ function(x, ...){
 	text((A+B+C+(D/2)), 0.6625, "d")
 	lines(c(0.5,0.5) ~ c(0,1), lwd = 2)
 	
-	cat("[a + b] - ", "Variation explained by phylogeny(PVR)", "\n", 
-			"[b + c] - ", "Variation explained by environmental variables", "\n", 
+	cat("[a] - ", "Variation explained by environmental variables", "\n", 
+			"[b] - ", "Shared variation between environmental variables and phylogeny(PVR)", "\n",
+			"[c] - ", "Variation explained by phylogeny(PVR)", "\n",
 			"[d]     - ", "Unexplained variation", "\n", sep = "")
 }
+

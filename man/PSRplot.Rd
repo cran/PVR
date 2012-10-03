@@ -8,7 +8,7 @@ Plot function for objects of class PSR
 Plot PSR curve along with null and neutral expectancies curves.
 }
 \usage{
-PSRplot(x, info = c("area", "null", "neutral", "both"), ...)
+PSRplot(x, info = c("area", "null", "Brownian", "both"), ...)
 }
 
 \arguments{
@@ -45,7 +45,7 @@ tree <- rcoal(10)
 #Decomposing phylogenetic distance matrix derived from tree into a set of orthogonal vectors
 x <- PVRdecomp(tree)
 trait <- runif(10)
-res <- PSR(x, trait = trait, null.model = TRUE, neutral.model = TRUE, times = 10)
+res <- PSR(x, trait = trait, null.model = TRUE, Brownian.model = TRUE, times = 10)
 PSRplot(res, info = "both")
 }
 

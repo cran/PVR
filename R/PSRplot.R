@@ -1,4 +1,4 @@
-PSRplot <- function(x, info = c("area", "null", "neutral", "both"), ...){
+PSRplot <- function(x, info = c("area", "null", "Brownian", "both"), ...){
 
 	if(info == "both"){
 		
@@ -22,8 +22,8 @@ PSRplot <- function(x, info = c("area", "null", "neutral", "both"), ...){
 				xlab = "cumulative eigenvalues(%)", 
 				ylab = "r squared", ylim = c(0,1), 
 				xlim = c(0,1), bty = "L", expected = segments(0, 0, 1, 1), pch = 16, ...)	
-		e <- rowMeans(x@neutralPSR)
-		f <- apply(x@neutralPSR, 1, var)
+		e <- rowMeans(x@BrownianPSR)
+		f <- apply(x@BrownianPSR, 1, var)
 		coordsShade <- data.frame(x = c(x@PSR$Cumul.eigen.values, sort(x@PSR$Cumul.eigen.values, decreasing = T)), 
 				y = c((e+f), sort((e-f), decreasing = T)))
 		
@@ -51,14 +51,14 @@ PSRplot <- function(x, info = c("area", "null", "neutral", "both"), ...){
 			lines(e ~ x@PSR$Cumul.eigen.values, lty = 2, cex = 1.5)
 		}	
 		
-		if(info == "neutral"){
+		if(info == "Brownian"){
 			
 			plot(x@PSR, 
 					xlab = "cumulative eigenvalues(%)", 
 					ylab = "r squared", ylim = c(0,1), 
 					xlim = c(0,1), bty = "L", expected = segments(0, 0, 1, 1), pch = 16, ...)	
-			e <- rowMeans(x@neutralPSR)
-			f <- apply(x@neutralPSR, 1, var)
+			e <- rowMeans(x@BrownianPSR)
+			f <- apply(x@BrownianPSR, 1, var)
 			coordsShade <- data.frame(x = c(x@PSR$Cumul.eigen.values, sort(x@PSR$Cumul.eigen.values, decreasing = T)), 
 					y = c((e+f), sort((e-f), decreasing = T)))
 			

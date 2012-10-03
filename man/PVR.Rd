@@ -8,7 +8,7 @@ Phylogenetic eigenvectors regression.
 The phylogenetic eigenvector regression (PVR) starts by performing an eigendecomposition of a pairwise double-centered phylogenetic distance matrix between species. The eigenvectors (representing the traits under analysis) estimated values express phylogenetic trends in data and residuals express independent evolution of each species.
 }
 \usage{
-PVR(x, phy = NULL, trait = NULL, envVar = NULL, method = "moran", weights = NULL, scaled = FALSE, significance = TRUE, alternative = "two.sided", sig.treshold = 0.05, MI.treshold = 0.05, psr.treshold = 0.01, n = 1, ...)
+PVR(x, phy = NULL, trait = NULL, envVar = NULL, method = "moran", weights = NULL, scaled = FALSE, significance = TRUE, alternative = "two.sided", sig.treshold = 0.05, MI.treshold = 0.05, psr.treshold = 0.01, accvalue.treshold = 0.9, ...)
 }
 
 \arguments{
@@ -43,13 +43,13 @@ The alternative hypothesis used to compute the significance level when selecting
 Minimum residuals Moran's I value used to select eigenvectors when significance is FALSE.
 }
   \item{sig.treshold}{
-The significance treshold used to select eigenvectors in the "moran" method.
+The significance treshold used to select eigenvectors by the "moran" method.
 }
   \item{psr.treshold}{
-The minimum acumulate R2 gain treshold used to select eigenvectors in the "PSR" method.
+The minimum acumulate R2 gain treshold used to select eigenvectors by the "PSR" method.
 }
-  \item{n}{
-Number of eigenvectors selected using "sequential" method.
+  \item{accvalue.treshold}{
+Relative accumulated eigenvalue treshold use to select the eigenvectors by the "sequential" method.
 }
   \item{\dots}{
 Parameters passed to the stepwise regression used in the "AIC" method
@@ -60,9 +60,11 @@ Parameters passed to the stepwise regression used in the "AIC" method
 A PVR class object.
 }
 \references{
-Diniz-Filho, J.A.F., Sant'Ana, C.E.R. and Bini, L.M. (1998). An eigenvector method for estimating phylogenetic inertia. Evolution 52:1247-1262.
+Diniz-Filho, J.A.F., Sant'Ana, C.E.R. and Bini, L.M. (1998). An eigenvector method for estimating phylogenetic inertia. Evolution, 52:1247-1262.
 
 Legendre, P. and Legendre, L. (1998). Numerical ecology, 2nd Englished. Elsevier.
+
+Desdevises, Y., Legendre, P., Azouzi, L. and Morand, S. (2003). Quantifying phylogenetic structured environmental variation, Evolution, 57(11):2647-2652
 
 Diniz-filho, J.A.F., Rangel, T.F., Santos, T. and Bini, L.M. (2012). Exploring patterns of interespecific variation in quantitative traits using sequential phylogenetic eigenvector regressions. Evolution, 66(4):1079-1090.
 
