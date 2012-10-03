@@ -33,7 +33,7 @@ PSR <- function(x, trait = NULL, null.model = FALSE, Brownian.model = FALSE, tim
 			
 			for(i in 1:Naxis){
 				
-				psr[i, 1] <- summary(lm(trait[,k] ~ matrix(as.real(pvr$vectors[,1:i]), ncol = i)))$r.squared
+				psr[i, 1] <- summary(lm(trait[,k] ~ matrix(as.double(pvr$vectors[,1:i]), ncol = i)))$r.squared
 				psr[i, 2] <- sum(relVal[1:i])	
 		
 			}
@@ -63,7 +63,7 @@ PSR <- function(x, trait = NULL, null.model = FALSE, Brownian.model = FALSE, tim
 					#---------Computing psr random curve
 					for(i in 1:Naxis){
 						
-						psrNull[i, 1] <- summary(lm(traitRand ~ matrix(as.real(pvr$vectors[,1:i]), ncol = i)))$r.squared
+						psrNull[i, 1] <- summary(lm(traitRand ~ matrix(as.double(pvr$vectors[,1:i]), ncol = i)))$r.squared
 						psrNull[i, 2] <- sum(relVal[1:i])
 					
 					}
@@ -123,7 +123,7 @@ PSR <- function(x, trait = NULL, null.model = FALSE, Brownian.model = FALSE, tim
 					#---------Computing psr random curve
 					for(i in 1:Naxis){
 									
-						psrBrownian[i, 1] <- summary(lm(traitRand ~ matrix(as.real(pvr$vectors[,1:i]), ncol = i)))$r.squared
+						psrBrownian[i, 1] <- summary(lm(traitRand ~ matrix(as.double(pvr$vectors[,1:i]), ncol = i)))$r.squared
 						psrBrownian[i, 2] <- sum(relVal[1:i])
 					}
 					

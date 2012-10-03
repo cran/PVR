@@ -2,7 +2,7 @@
 \alias{PVR-package}
 \docType{package}
 \title{
-Computes \bold{P}hylogenetic eigen\bold{V}ectors \bold{R}egression and \bold{P}hylogentic \bold{S}ignal-\bold{R}epresentation curve (with null and neutral expectancies).
+Computes \bold{P}hylogenetic eigen\bold{V}ectors \bold{R}egression and \bold{P}hylogentic \bold{S}ignal-\bold{R}epresentation curve (with null and neutral expectations).
 }
 \description{
 Computes PVR and PSR curve along with some plot utilitties.

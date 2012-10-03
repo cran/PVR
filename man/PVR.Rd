@@ -28,7 +28,7 @@ A vector, data frame or matrix that contains environmental variables. Used to es
 Character string. A name for the eigenvectors selection method. It can be "moran", "stepwise", "psr" or "sequential".
 }
   \item{weights}{
-Weighting matrix based on phylogentic distances used in the "moran" method. If no weights matrix is provided, weights will be set to max(D) - Dij, where D is the phylogenetic distance matrix. 
+Weighting matrix based on Phylogenetic distances used in the "moran" method. If no weights matrix is provided, weights will be set to max(D) - Dij, where D is the phylogenetic distance matrix. 
 }
   \item{scaled}{
 Logical. Should the phylogenetic distances be scaled into the range of 0 to 1. Default is FALSE.

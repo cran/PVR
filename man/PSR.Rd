@@ -20,10 +20,10 @@ A vector, data frame or matrix that contains contiuous or binary traits sets (fo
 }
 
   \item{null.model}{
-Logical. Should the function estimates the null expectancy for the PSR area. Default is FALSE.
+Logical. Should the function estimates the null expectation for the PSR area. Default is FALSE.
 }
   \item{Brownian.model}{
-Logical. Should the function estimates the Brownian (neutral) expectancy for the PSR area. Default is FALSE.
+Logical. Should the function estimates the Brownian (neutral) expectation for the PSR area. Default is FALSE.
 }
   \item{times}{
 Number of iterations used in null.model and Brownian.model.
@@ -31,7 +31,7 @@ Number of iterations used in null.model and Brownian.model.
 }
 
 \value{
-PSR function returns a object of (S4) class PSR that extends the (S4) class PVR, by adding: a PSR slot that contains the area (and p if null.model = TRUE) for each trait set, the cumulative eigenvalues and R2 that determine the curve; a slot with the null and neutral expectancies (if any).
+PSR function returns a object of (S4) class PSR that extends the (S4) class PVR, by adding: a PSR slot that contains the area (and p if null.model = TRUE) for each trait set, the cumulative eigenvalues and R2 that determine the curve; a slot with the null and neutral expectations (if any).
 
 }
 \references{

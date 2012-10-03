@@ -5,7 +5,7 @@
 Plot function for objects of class PSR 
 }
 \description{
-Plot PSR curve along with null and neutral expectancies curves.
+Plot PSR curve along with null and neutral expectations curves.
 }
 \usage{
 PSRplot(x, info = c("area", "null", "Brownian", "both"), ...)
