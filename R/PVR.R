@@ -1,6 +1,5 @@
 PVR <- function(x, phy = NULL, trait = NULL, envVar = NULL, method = "moran", 
-		weights = NULL, scaled = FALSE, significance = TRUE, alternative = "two.sided",
-		sig.treshold = 0.05, MI.treshold = 0.05, psr.treshold = 0.01, accvalue.treshold = 0.9, ...){
+		weights = NULL, scaled = FALSE, sig = TRUE, sig.t = 0.05, MI.t = 0.05, psr.t = 0.01, accvalue.t = 0.9, ...){
 	
 	if(method == "moran" | method == "Moran" | method == "MoransI" | method == "Moransi"){
 			
@@ -27,7 +26,7 @@ PVR <- function(x, phy = NULL, trait = NULL, envVar = NULL, method = "moran",
 			
 			pvr <- as.matrix(pvr)
 			tmpLM <- lm(tmpTrait ~ pvr[ ,c1])
-			MI <- Moran.I(tmpLM$residuals, weight = W, scaled = scaled, alternative = alternative)
+			MI <- Moran.I(tmpLM$residuals, weight = W, scaled = scaled, alternative = "two.sided")
 			tmpRes[c1, 1] <- round(MI$p.value, 5)
 			tmpRes[c1, 2] <- MI$observed
 			
@@ -45,15 +44,15 @@ PVR <- function(x, phy = NULL, trait = NULL, envVar = NULL, method = "moran",
 				tmpColNames <- tmpColNames[-selAxis[1]]
 				pvr <- as.matrix(pvr)
 				colnames(pvr) <- tmpColNames 
-				if(significance){
+				if(sig){
 					
-					if(tmpRes[selAxis[1], 1] > sig.treshold | c2 == Naxis){
+					if(tmpRes[selAxis[1], 1] > sig.t | c2 == Naxis){
 						
 						break
 					}	
 				} else {
 					
-					if(tmpRes[selAxis[1], 2] > MI.treshold | c2 == Naxis){
+					if(tmpRes[selAxis[1], 2] > MI.t | c2 == Naxis){
 						
 						break
 					}
@@ -120,7 +119,7 @@ PVR <- function(x, phy = NULL, trait = NULL, envVar = NULL, method = "moran",
 		for(i in 2:(Naxis-1)){
 			
 			deltaR2 <- psr$r.squared[i] - psr$r.squared[(i - 1)]
-			if(deltaR2 >= psr.treshold){
+			if(deltaR2 >= psr.t){
 				
 				selected[ ,c1] <- pvr[ ,i]
 				id <- c(id, colnames(pvr)[i])
@@ -146,7 +145,7 @@ PVR <- function(x, phy = NULL, trait = NULL, envVar = NULL, method = "moran",
 			relAccVal[i] <- sum(relVal[1:i])
 		}
 		pvr <- x@Eigen@vectors
-		selected <- pvr[,which(relAccVal <= accvalue.treshold)]
+		selected <- pvr[,which(relAccVal <= accvalue.t)]
 		reg <- colnames(selected)
 		selection <- list(Method = "Sequential", Vectors = selected, Id = reg)
 		x@Selection <- selection

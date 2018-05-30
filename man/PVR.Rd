@@ -8,7 +8,9 @@ Phylogenetic eigenvectors regression.
 The phylogenetic eigenvector regression (PVR) starts by performing an eigendecomposition of a pairwise double-centered phylogenetic distance matrix between species. The eigenvectors (representing the traits under analysis) estimated values express phylogenetic trends in data and residuals express independent evolution of each species.
 }
 \usage{
-PVR(x, phy = NULL, trait = NULL, envVar = NULL, method = "moran", weights = NULL, scaled = FALSE, significance = TRUE, alternative = "two.sided", sig.treshold = 0.05, MI.treshold = 0.05, psr.treshold = 0.01, accvalue.treshold = 0.9, ...)
+PVR(x,phy,trait,envVar,method="moran",weights,
+scaled=FALSE,sig=TRUE,sig.t=0.05,MI.t=0.05,psr.t=0.01,
+accvalue.t=0.9,...)
 }
 
 \arguments{
@@ -33,22 +35,19 @@ Weighting matrix based on Phylogenetic distances used in the "moran" method. If 
   \item{scaled}{
 Logical. Should the phylogenetic distances be scaled into the range of 0 to 1. Default is FALSE.
 }
-  \item{significance}{
+  \item{sig}{
 Logical. Should the eigenvectors selected by the "moran" method be selected by the significance of residuals autocorrelation. If FALSE the eigenvectors will be selected by Moran's I values.
 }
-  \item{alternative}{
-The alternative hypothesis used to compute the significance level when selecting eigenvectors by the "moran" method.
-}
-  \item{MI.treshold}{
+  \item{MI.t}{
 Minimum residuals Moran's I value used to select eigenvectors when significance is FALSE.
 }
-  \item{sig.treshold}{
+  \item{sig.t}{
 The significance treshold used to select eigenvectors by the "moran" method.
 }
-  \item{psr.treshold}{
+  \item{psr.t}{
 The minimum acumulate R2 gain treshold used to select eigenvectors by the "PSR" method.
 }
-  \item{accvalue.treshold}{
+  \item{accvalue.t}{
 Relative accumulated eigenvalue treshold use to select the eigenvectors by the "sequential" method.
 }
   \item{\dots}{
@@ -78,6 +77,7 @@ Santos, T; Diniz-Filho, J.A.F.; Rangel, T.F.; Bini, L.M.
  \code{\link{PSR}},  \code{\link{PVRdecomp}},  \code{\link{PSRplot}},  \code{\link{VarPartplot}}
 }
 \examples{
+
 library(ape)
 tree <- rcoal(10)
 #Decomposing phylogenetic distance matrix derived from tree into a set of orthogonal vectors

@@ -1,4 +1,4 @@
-.onLoad <-function(libname, pkgname)
+.onAttach <-function(libname, pkgname)
 {
 	ver <- read.dcf(file.path(libname, pkgname, "DESCRIPTION"), "Version")
 	ver <- as.character(ver)	
@@ -7,9 +7,10 @@
 }
 
 setOldClass("phylo")
+setOldClass("eigen")
 
 setClass("PVR", representation(
-				Eigen = "list", phyDist = "matrix", phylo = "phylo", Selection = "list", PVR = "list", VarPart = "list")
+				Eigen = "eigen", phyDist = "matrix", phylo = "phylo", Selection = "list", PVR = "list", VarPart = "list")
 )
 
 setClass("PSR", representation(

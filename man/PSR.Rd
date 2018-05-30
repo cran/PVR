@@ -49,6 +49,7 @@ Santos, T; Diniz-Filho, J.A.F.; Rangel, T.F.; Bini, L.M.
  \code{\link{PVR}},  \code{\link{PVRdecomp}},  \code{\link{PSRplot}},  \code{\link{VarPartplot}}
 }
 \examples{
+
 library(splancs)
 #Creating a 10 tips ultrametric random phylogeny
 library(ape)
@@ -57,7 +58,7 @@ tree <- rcoal(10)
 x <- PVRdecomp(tree)
 trait <- runif(10)
 y <- PSR(x, trait)
-plot(y)
+summary(y)
 }
 
 \keyword{phylogenetic signal}

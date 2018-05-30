@@ -1,7 +1,10 @@
+import(ape, stats)
+importFrom("graphics", "lines", "par", "points", "polygon", "segments", "text", "plot")
+importFrom("methods", "new", "slot", "show")
+importFrom("utils", "read.table")
+importFrom("splancs", "areapl")
+importFrom("MASS", "stepAIC")
 export(PVRdecomp,PVR, PSR, VarPartplot, PSRplot)
-import(ape, methods)
-importFrom("splancs", areapl)
-importFrom("graphics", plot)
-importFrom("methods", show)
 exportClasses("PVR", "PSR")
+
 

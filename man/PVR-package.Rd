@@ -12,7 +12,7 @@ Computes PVR and PSR curve along with some plot utilitties.
 Package: \tab PVR\cr
 Type: \tab Package\cr
 Version: \tab 1.0\cr
-Date: \tab 2012-06-23\cr
+Date: \tab 2018-05-29\cr
 License: \tab GPL >= 2\cr
 }
 
@@ -20,12 +20,10 @@ License: \tab GPL >= 2\cr
 \author{
 Santos, T; Diniz-Filho, J.A.F.; Rangel, T.F.; Bini, L.M.
 
-Maintainer: Thiago Santos <thiagobioufg@gmail.com>
+Maintainer: Thiago Santos <thiago.santos@ufvjm.edu.br>
 }
 \references{
 Diniz-Filho, J.A.F., Sant'Ana, C.E.R. and Bini, L.M. (1998). An eigenvector method for estimating phylogenetic inertia. Evolution 52:1247-1262.
-
-Legendre, P. and Legendre, L. (1998). Numerical ecology, 2nd Englished. Elsevier.
 
 Diniz-filho, J.A.F., Rangel, T.F., Santos, T. and Bini, L.M. (2012). Exploring patterns of interespecific variation in quantitative traits using sequential phylogenetic eigenvector regressions. Evolution, 66(4):1079-1090.
 
@@ -38,6 +36,7 @@ Diniz-filho, J.A.F., Bini, L.M., Rangel, T.F., Morales-Castilla, I., Olalla-Tarr
 \code{\link{PVR-class}}, \code{\link{PSR-class}}, \code{\link{PVR}}, \code{\link{PSR}},  \code{\link{PVRdecomp}},  \code{\link{PSRplot}},  \code{\link{VarPartplot}}
 }
 \examples{
+library(splancs)
 #Creating a 10 tips ultrametric random phylogeny
 library(ape)
 tree <- rcoal(10)
@@ -45,5 +44,5 @@ tree <- rcoal(10)
 x <- PVRdecomp(tree)
 trait <- runif(10)
 y <- PSR(x, trait)
-plot(y)
+y
 }
